@@ -14,7 +14,8 @@ const Counter = () => {
 export default Counter;
 
 
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 describe('Counter component', () => {
   test('ilk renderdə 0 göstərir', () => {
@@ -24,11 +25,13 @@ describe('Counter component', () => {
 
   test('button kliklənəndə say artır', () => {
     render(<Counter />);
+    const user = userEvent.setup();
     const button = screen.getByText('Artır');
 
-    fireEvent.click(button);
-    fireEvent.click(button);
-
-    expect(screen.getByTestId('count')).toHaveTextContent('2');
+    return (async () => {
+      await user.click(button);
+      await user.click(button);
+      expect(screen.getByTestId('count')).toHaveTextContent('2');
+    })();
   });
 });
